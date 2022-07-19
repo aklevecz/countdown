@@ -6,82 +6,27 @@ The below component was designed to count down the days until our CTO's birthday
 **Do a critique:** The current implementation isn't perfect. How could it be improved?
 
 * Pick an area of improvement to implement.
+  * Improve the general date calculations 
+  * Make the presentation more dynamic
+  * Change the Countdown component to be hooks oriented
+  * Abstract redudant pieces of HTML into their own components.
+  * Added an input to put in any Birthdate
+  * Added flex to make the layout responsive to smaller screens
 * What would happen to the current code if the date were changed, the page layout was changed or the format was changed?
+  * The date was not flexible, along with having the wrong year, and the layout was not responsive. I contained the Countdown in a simple flex container so that each block will wrap as the screen size changes
 * Does the current implementation follow best practices for HTML, CSS, JS and React?
+  * The CSS was pretty barebones and generally functional as it was, but did not have any infrastructure related content to containers or wrappers.
+  * Some of the JS were purely utility functions that did not need to live within a components scope. I moved them to their own `utils.js` file to clean up the flow.
+  * There was redundancy, especially with each time block that React accels at eating up using components-- so I broke those out into presentational `CountdownItem` components that simply take the title and current count.
+  * I made the layout more data driven by looping through the countdown state for producing each `CountdownItem`
+  * The calculations for the countdown included a series of conditionals that continually mutate a variable tracking the time remaining in seconds and creating the mapping for the countdown state. This is not an inherenly flawed approach, but it is ripe for generating bugs wrapped into either interaction. This approach also left out calculating remaining months, which is trickier to calculate than merely multiplying measures of time, so I decided to avoid reinventing the wheel and used the `date-fns` library to drastically clean up the code and make it easily immutable.
 
 **Spice it up:** Let's be honest, this countdown could be a whole lot more exciting.
 
 * What could you do to create a greater sense of urgency?
+  * I added some color and emboldened the fonts. I could do more if desired, but I kept it simple
 * How would you make this countdown more aesthetically pleasing?
+  * Fonts and some slightly creative layout of title and number were my approach
 * Trust your design instincts, and explain how your design choices impact the user experience
-
-## Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `yarn start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  * I think the color and fonts make it feel more interesting and compelling. 
+  * The loading animation pulls the user in a little more and communicates the dynamic nature of the view

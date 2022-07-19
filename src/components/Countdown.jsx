@@ -1,102 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import _ from "lodash";
+import { addLeadingZeros, calculateCountdown } from "../utils";
+import CountdownItem from "./CountdownItem";
+import LoadingSpinner from "./LoadingSpinner";
 
-class Countdown extends React.Component {
-  constructor(props) {
-    super(props);
+const COUNT_INTERVAL_MS = 1000;
 
-    this.state = {
-      days: 0,
-      hours: 0,
-      min: 0,
-      sec: 0,
-    }
-  }
+export default function Countdown({ date }) {
+  const [countdown, setCountdown] = useState(null);
 
-  componentDidMount() {
-    // update every second
-    this.interval = setInterval(() => {
-      const date = this.calculateCountdown(this.props.date);
-      date ? this.setState(date) : this.stop();
-    }, 1000);
-  }
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newDate = calculateCountdown(date);
+      setCountdown(newDate);
+    }, COUNT_INTERVAL_MS);
 
-  componentWillUnmount() {
-    this.stop();
-  }
-
-  calculateCountdown(endDate) {
-    let diff = (Date.parse(new Date(endDate)) - Date.parse(new Date())) / 1000;
-
-    const timeLeft = {
-      years: 0,
-      days: 0,
-      hours: 0,
-      min: 0,
-      sec: 0,
-      millisec: 0,
+    return () => {
+      clearInterval(interval);
     };
-
-    // calculate time difference between now and expected date
-    if (diff >= (365.25 * 86400)) { // 365.25 * 24 * 60 * 60
-      timeLeft.years = Math.floor(diff / (365.25 * 86400));
-      diff -= timeLeft.years * 365.25 * 86400;
-    }
-    if (diff >= 86400) { // 24 * 60 * 60
-      timeLeft.days = Math.floor(diff / 86400);
-      diff -= timeLeft.days * 86400;
-    }
-    if (diff >= 3600) { // 60 * 60
-      timeLeft.hours = Math.floor(diff / 3600);
-      diff -= timeLeft.hours * 3600;
-    }
-    if (diff >= 60) {
-      timeLeft.min = Math.floor(diff / 60);
-      diff -= timeLeft.min * 60;
-    }
-    timeLeft.sec = diff;
-
-    return timeLeft;
+  }, [date]);
+  if (!countdown) {
+    return <LoadingSpinner />;
   }
-
-  stop() {
-    clearInterval(this.interval);
-  }
-
-  addLeadingZeros(value) {
-    value = String(value);
-    while (value.length < 2) {
-      value = '0' + value;
-    }
-    return value;
-  }
-
-  render() {
-    const countDown = this.state;
-
-    return (
-      <div className="Countdown">
-        <span className="countdown-col">
-          <strong>{this.addLeadingZeros(countDown.days)}</strong>
-          <span>{countDown.days === 1 ? 'Day' : 'Days'}</span>
-        </span>
-
-        <span className="countdown-col">
-          <strong>{this.addLeadingZeros(countDown.hours)}</strong>
-          <span>Hours</span>
-        </span>
-
-        <span className="countdown-col">
-          <strong>{this.addLeadingZeros(countDown.min)}</strong>
-          <span>Min</span>
-        </span>
-
-        <span className="countdown-col">
-          <strong>{this.addLeadingZeros(countDown.sec)}</strong>
-          <span>Sec</span>
-        </span>
-      </div>
-    );
-  }
+  return (
+    <div className="Countdown">
+      {Object.keys(countdown)
+        .filter((key) => countdown[key])
+        .map((key) => (
+          <CountdownItem
+            key={key}
+            title={
+              countdown[key] === 1
+                ? _.startCase(key.slice(0, -1))
+                : _.startCase(key)
+            }
+            count={addLeadingZeros(countdown[key])}
+          />
+        ))}
+    </div>
+  );
 }
-
-export default Countdown;

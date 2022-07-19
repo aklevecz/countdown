@@ -1,3 +1,44 @@
-.countdown-col {
-  padding-right: 10px;
+.Countdown {
+  display: flex;
+  flex-wrap:wrap;
+  justify-content: space-around;
+  column-gap: 0px;
+  row-gap: 20px;
+  width:90%;
+  max-width: 800px;
+  margin:auto;
+}
+
+.countdown-item {
+  position: relative;
+  font-size:1.2rem;
+  width:120px;
+  height:auto;
+}
+
+.countdown-item__title {
+  top:20px;
+  position: absolute;
+  text-align: center;
+  z-index: 0s;
+  font-weight: bold;
+  font-size:1.5rem;
+  letter-spacing: 3px;
+  width:100%;
+  opacity: .7;
+
+}
+
+.countdown-item__count {
+  font-weight:bold;
+  font-size:4rem;
+  color:rgb(251, 83, 83);
+}
+
+@media screen and (max-width:768px) {
+  .countdown-item__title {
+    top:-10px;
+    width:100%;
+  } 
+  
 }
